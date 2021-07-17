@@ -55,5 +55,4 @@ function fullImage(event) {
   `,
     )
     .show(event);
-  console.log(event.target.alt);
 }
