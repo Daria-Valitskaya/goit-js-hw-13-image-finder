@@ -35,8 +35,10 @@ function clearImageContainer() {
 }
 
 function scrollintoView() {
-  refs.gallery.scrollIntoView({
-    behavior: 'smooth',
-    block: 'end',
-  });
+  setTimeout(() => {
+    refs.gallery.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
+  }, 200);
 }
