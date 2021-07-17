@@ -3,6 +3,13 @@ import { refs } from './js/refs.js';
 import imageCard from './templates/imageCard.hbs';
 import ImageApiServise from './js/apiService';
 import * as basicLightbox from 'basiclightbox';
+
+import { alert, error, defaultModules } from '@pnotify/core';
+import * as PNotifyCountdown from '@pnotify/countdown';
+import '@pnotify/countdown/dist/PNotifyCountdown.css';
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
+
 //   form: document.querySelector('#search-form'),
 //   input: document.querySelector('.input'),
 //   searchBtn: document.querySelector('.search-btn'),
@@ -19,10 +26,17 @@ const newApiService = new ImageApiServise();
 function onSearch(event) {
   event.preventDefault();
   clearImageContainer();
-  refs.loadMore.classList.remove('is-hidden');
-  newApiService.query = event.currentTarget.query.value.trim().toLowerCase();
-  newApiService.resetPage();
-  newApiService.fetchImage().then(renderImageCard);
+
+  if (event.currentTarget.query.value.trim() !== '') {
+    newApiService.query = event.currentTarget.query.value.trim().toLowerCase();
+    newApiService.resetPage();
+    newApiService
+      .fetchImage()
+      .then(renderImageCard)
+      .then(refs.loadMore.classList.remove('is-hidden'));
+    clearInput();
+  }
+  return emptyQuery();
 }
 function onLoadMore(event) {
   newApiService.fetchImage().then(renderImageCard).then(scrollintoView);
@@ -55,4 +69,35 @@ function fullImage(event) {
   `,
     )
     .show(event);
+}
+
+function clearInput() {
+  refs.input.value = '';
+}
+
+function noResults() {
+  error({
+    title: 'No matches found.',
+    text: 'Please enter different query!',
+    delay: 2000,
+    modules: new Map([...defaultModules, [PNotifyCountdown, {}]]),
+  });
+}
+
+function emptyQuery() {
+  alert({
+    title: 'Query is empty.',
+    text: 'Please enter something!',
+    delay: 2000,
+    modules: new Map([...defaultModules, [PNotifyCountdown, {}]]),
+  });
+}
+
+function noMoreImages() {
+  error({
+    title: 'There are no more images in this category.',
+    text: 'Please enter different query!',
+    delay: 2000,
+    modules: new Map([...defaultModules, [PNotifyCountdown, {}]]),
+  });
 }
