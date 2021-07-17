@@ -8,18 +8,35 @@ import ImageApiServise from './js/apiService';
 //   gallery: document.querySelector('.gallery'),
 //   loadMore: document.querySelector('[data-action="load-more"]'),
 // };
-// refs.gallery.insertAdjacentHTML('beforeend', imageCard(API));
+
+refs.form.addEventListener('submit', onSearch);
+refs.loadMore.addEventListener('click', onLoadMore);
+
 const newApiService = new ImageApiServise();
 
 function onSearch(event) {
   event.preventDefault();
-  newApiService.query = event.currentTarget.query.value;
+  clearImageContainer();
+  refs.loadMore.classList.remove('is-hidden');
+  newApiService.query = event.currentTarget.query.value.trim().toLowerCase();
   newApiService.resetPage();
-  newApiService.fetchImage();
-  console.log(event.currentTarget.query.value);
+  newApiService.fetchImage().then(renderImageCard);
 }
 function onLoadMore(event) {
-  newApiService.fetchImage();
+  newApiService.fetchImage().then(renderImageCard).then(scrollintoView);
 }
-refs.form.addEventListener('submit', onSearch);
-refs.loadMore.addEventListener('click', onLoadMore);
+
+function renderImageCard(hits) {
+  refs.gallery.insertAdjacentHTML('beforeend', imageCard(hits));
+}
+
+function clearImageContainer() {
+  refs.gallery.innerHTML = '';
+}
+
+function scrollintoView() {
+  refs.gallery.scrollIntoView({
+    behavior: 'smooth',
+    block: 'end',
+  });
+}

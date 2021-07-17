@@ -7,12 +7,14 @@ export default class ImageApiServise {
     this.page = 1;
   }
   fetchImage(keyword) {
-    fetch(
+    return fetch(
       `${BASE_URL}?image_type=photo&orientation=horizontal&q=${this.keyword}&page=${this.page}&per_page=12&key=${API_KEY}`,
     )
       .then(r => r.json())
       .then(data => {
+        // console.log(data);
         this.page += 1;
+        return data.hits;
       });
   }
   resetPage() {
