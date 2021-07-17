@@ -14,11 +14,12 @@ const newApiService = new ImageApiServise();
 function onSearch(event) {
   event.preventDefault();
   newApiService.query = event.currentTarget.query.value;
+  newApiService.resetPage();
+  newApiService.fetchImage();
   console.log(event.currentTarget.query.value);
 }
-// function onLoadMore(event) {
-//   newApiService.query = event.currentTarget.elements.query;
-//   console.log(event.currentTarget.elements.query);
-// }
+function onLoadMore(event) {
+  newApiService.fetchImage();
+}
 refs.form.addEventListener('submit', onSearch);
 refs.loadMore.addEventListener('click', onLoadMore);
