@@ -25,11 +25,16 @@ function onSearch(event) {
     newApiService.resetPage();
     newApiService.fetchImage().then(renderImageCard);
     clearInput();
+  } else {
+    emptyQuery();
+    clearInput();
   }
-  return emptyQuery();
+  return clearInput();
 }
 function onLoadMore(event) {
-  newApiService.fetchImage().then(renderImageCard).then(scrollintoView);
+  if (event.currentTarget.query.value.trim() !== '') {
+    newApiService.fetchImage().then(renderImageCard).then(scrollintoView);
+  }
 }
 
 function renderImageCard(hits) {
@@ -39,8 +44,12 @@ function renderImageCard(hits) {
     if (hits.length < 12) {
       return noMoreImages();
     }
+  } else {
+    noResults();
+    clearInput();
+    return refs.loadMore.classList.add('is-hidden');
   }
-  return noResults();
+  return refs.loadMore.classList.add('is-hidden');
 }
 
 function clearImageContainer() {
