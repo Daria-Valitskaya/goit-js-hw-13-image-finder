@@ -10,13 +10,6 @@ import '@pnotify/countdown/dist/PNotifyCountdown.css';
 import '@pnotify/core/dist/PNotify.css';
 import '@pnotify/core/dist/BrightTheme.css';
 
-//   form: document.querySelector('#search-form'),
-//   input: document.querySelector('.input'),
-//   searchBtn: document.querySelector('.search-btn'),
-//   gallery: document.querySelector('.gallery'),
-//   loadMore: document.querySelector('[data-action="load-more"]'),
-// };
-
 refs.form.addEventListener('submit', onSearch);
 refs.loadMore.addEventListener('click', onLoadMore);
 refs.gallery.addEventListener('click', fullImage);
@@ -30,10 +23,7 @@ function onSearch(event) {
   if (event.currentTarget.query.value.trim() !== '') {
     newApiService.query = event.currentTarget.query.value.trim().toLowerCase();
     newApiService.resetPage();
-    newApiService
-      .fetchImage()
-      .then(renderImageCard)
-      .then(refs.loadMore.classList.remove('is-hidden'));
+    newApiService.fetchImage().then(renderImageCard);
     clearInput();
   }
   return emptyQuery();
@@ -43,7 +33,14 @@ function onLoadMore(event) {
 }
 
 function renderImageCard(hits) {
-  refs.gallery.insertAdjacentHTML('beforeend', imageCard(hits));
+  if (hits.length !== 0) {
+    refs.gallery.insertAdjacentHTML('beforeend', imageCard(hits));
+    refs.loadMore.classList.remove('is-hidden');
+    if (hits.length < 12) {
+      return noMoreImages();
+    }
+  }
+  return noResults();
 }
 
 function clearImageContainer() {
