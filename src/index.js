@@ -24,11 +24,10 @@ function onSearch(event) {
     newApiService.query = event.currentTarget.query.value.trim().toLowerCase();
     newApiService.resetPage();
     newApiService.fetchImage().then(renderImageCard);
-    clearInput();
   } else {
     emptyQuery();
-    clearInput();
-    return refs.loadMore.classList.add('is-hidden');
+
+    refs.loadMore.classList.add('is-hidden');
   }
   return clearInput();
 }
@@ -42,12 +41,12 @@ function renderImageCard(hits) {
     refs.loadMore.classList.remove('is-hidden');
     if (hits.length < 12) {
       refs.loadMore.classList.add('is-hidden');
-      return noMoreImages();
+      noMoreImages();
     }
   } else {
     noResults();
     clearInput();
-    return refs.loadMore.classList.add('is-hidden');
+    refs.loadMore.classList.add('is-hidden');
   }
 }
 
