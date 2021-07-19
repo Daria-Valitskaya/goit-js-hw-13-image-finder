@@ -28,13 +28,12 @@ function onSearch(event) {
   } else {
     emptyQuery();
     clearInput();
+    return refs.loadMore.classList.add('is-hidden');
   }
   return clearInput();
 }
 function onLoadMore(event) {
-  if (event.currentTarget.query.value.trim() !== '') {
-    newApiService.fetchImage().then(renderImageCard).then(scrollintoView);
-  }
+  newApiService.fetchImage().then(renderImageCard).then(scrollintoView);
 }
 
 function renderImageCard(hits) {
@@ -42,6 +41,7 @@ function renderImageCard(hits) {
     refs.gallery.insertAdjacentHTML('beforeend', imageCard(hits));
     refs.loadMore.classList.remove('is-hidden');
     if (hits.length < 12) {
+      refs.loadMore.classList.add('is-hidden');
       return noMoreImages();
     }
   } else {
@@ -49,7 +49,6 @@ function renderImageCard(hits) {
     clearInput();
     return refs.loadMore.classList.add('is-hidden');
   }
-  return refs.loadMore.classList.add('is-hidden');
 }
 
 function clearImageContainer() {
